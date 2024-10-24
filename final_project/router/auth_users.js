@@ -1,6 +1,6 @@
 const express = require("express");
 const jwt = require("jsonwebtoken");
-let books = require("./booksdb.js");
+let { books } = require("./booksdb.js");
 const regd_users = express.Router();
 
 let users = [{ username: "Nati", password: "Kj4114" }];
@@ -43,7 +43,8 @@ regd_users.put("/auth/review/:isbn", (req, res) => {
   let isbn = req.params.isbn;
   let review = req.query.review;
   let username = req.session.authorization.username;
-  console.log("we are here ");
+  console.log(JSON.stringify(books[isbn]));
+
   if (books[isbn]) {
     if (books[isbn].reviews[username]) {
       books[isbn].reviews[username] = [review];

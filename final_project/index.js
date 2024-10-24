@@ -3,6 +3,7 @@ const jwt = require("jsonwebtoken");
 const session = require("express-session");
 const customer_routes = require("./router/auth_users.js").authenticated;
 const genl_routes = require("./router/general.js").general;
+const { router: books_route } = require("./router/booksdb.js");
 
 const app = express();
 
@@ -19,6 +20,7 @@ app.use(
 
 app.use("/books", books_route);
 
+// Apply auth middleware before customer routes
 app.use("/customer/auth/*", function auth(req, res, next) {
   if (req.session && req.session.authorization) {
     let token = req.session.authorization.token;
@@ -37,7 +39,10 @@ app.use("/customer/auth/*", function auth(req, res, next) {
 
 const PORT = 5000;
 
+// Customer routes
 app.use("/customer", customer_routes);
+
+// General routes
 app.use("/", genl_routes);
 
 app.listen(PORT, () => console.log("Server is running"));
